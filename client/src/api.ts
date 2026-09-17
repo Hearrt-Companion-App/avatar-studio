@@ -269,11 +269,17 @@ export const api = {
     const model = (MODELS as readonly string[]).includes(settings.model) ? settings.model : DEFAULT_MODEL;
     const prompt = buildPrompt(options, selections, extra);
 
-    const res = await fetch('https://api.openai.com/v1/images/generations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({ model, prompt, n: 1, size: settings.size, quality: settings.quality, output_format: 'png' }),
-    });
+    let res: Response;
+    try {
+      res = await fetch('https://api.openai.com/v1/images/generations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+        body: JSON.stringify({ model, prompt, n: 1, size: settings.size, quality: settings.quality, output_format: 'png' }),
+      });
+    } catch {
+      // OpenAI's auth layer rejects bad keys without CORS headers, so a wrong key surfaces here as a network error.
+      throw new Error('Could not reach OpenAI. Check that your API key in Settings is correct and that you are online.');
+    }
     if (!res.ok) {
       let message = `OpenAI error (HTTP ${res.status})`;
       try {
