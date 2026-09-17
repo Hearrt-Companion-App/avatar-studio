@@ -28,9 +28,15 @@ Open http://localhost:5175.
 
 ## Deploying to GitHub Pages
 
-The workflow at `.github/workflows/deploy-avatar-studio.yml` builds the client and publishes it to GitHub Pages on every push to `main` that touches `avatar-studio/`. One-time setup in the repo: **Settings → Pages → Source: GitHub Actions**. The site is then served at `https://<owner>.github.io/<repo>/`.
+This folder is published as its own public repo, **Hearrt-Companion-App/avatar-studio**, and served at https://hearrt-companion-app.github.io/avatar-studio/. The workflow in `.github/workflows/deploy.yml` builds `client/` and deploys on every push to `main` there.
 
-Note: GitHub Pages is only available on public repositories for free accounts and organisations.
+The source of truth is the `avatar-studio/` folder in the private Split-Chat monorepo. After committing changes there, push them to the public repo with:
+
+```bash
+git subtree push --prefix avatar-studio avatar-studio main
+```
+
+(`avatar-studio` is a git remote pointing at the public repo.)
 
 ## How the prompt is built
 
