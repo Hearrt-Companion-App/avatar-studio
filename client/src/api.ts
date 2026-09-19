@@ -274,7 +274,7 @@ export const api = {
       res = await fetch('https://api.openai.com/v1/images/generations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-        body: JSON.stringify({ model, prompt, n: 1, size: settings.size, quality: settings.quality, output_format: 'png' }),
+        body: JSON.stringify({ model, prompt, n: 1, size: settings.size, quality: settings.quality, background: 'transparent', output_format: 'png' }),
       });
     } catch {
       // OpenAI's auth layer rejects bad keys without CORS headers, so a wrong key surfaces here as a network error.
